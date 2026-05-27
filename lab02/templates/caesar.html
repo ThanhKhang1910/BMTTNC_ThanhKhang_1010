@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Caesar Cipher</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" rel="stylesheet"/>
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: rgba(30, 41, 59, 0.7);
+            --border-color: rgba(255, 255, 255, 0.08);
+            --primary-gradient: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0;
+            padding: 2rem 0;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Decorative Background Blobs */
+        .blob {
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.1) 0%, rgba(0, 0, 0, 0) 70%);
+            z-index: -1;
+            filter: blur(40px);
+        }
+        .blob-1 { top: -10%; left: -10%; }
+        .blob-2 { bottom: -10%; right: -10%; }
+
+        .main-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            backdrop-filter: blur(12px);
+            border-radius: 24px;
+            padding: 2.5rem;
+            max-width: 650px;
+            width: 100%;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            position: relative;
+        }
+
+        .back-btn {
+            position: absolute;
+            top: 1.5rem;
+            left: 1.5rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-color);
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            font-weight: 600;
+            padding: 0.5rem 1rem;
+            border-radius: 12px;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .back-btn:hover {
+            color: #ffffff;
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateX(-2px);
+        }
+
+        h2 {
+            font-weight: 800;
+            font-size: 1.8rem;
+            letter-spacing: -0.025em;
+            background: linear-gradient(135deg, #60a5fa 0%, #c084fc 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-align: center;
+            margin-top: 1rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .section-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            margin-bottom: 1.2rem;
+            padding-bottom: 0.4rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .enc-title { color: #60a5fa; }
+        .dec-title { color: #34d399; }
+
+        .form-section {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border-color);
+            border-radius: 18px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .form-label {
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 0.5rem;
+        }
+
+        .form-control {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            color: #ffffff;
+            padding: 0.75rem 1rem;
+            font-size: 0.95rem;
+            transition: all 0.2s ease;
+        }
+
+        .form-control:focus {
+            background: rgba(15, 23, 42, 0.8);
+            border-color: #6366f1;
+            box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.25);
+            color: #ffffff;
+        }
+
+        .form-control::placeholder {
+            color: #475569;
+        }
+
+        .btn {
+            font-weight: 600;
+            font-size: 0.95rem;
+            padding: 0.7rem 1.5rem;
+            border-radius: 12px;
+            border: none;
+            width: 100%;
+            transition: all 0.2s ease;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 16px rgba(59, 130, 246, 0.3);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #10b981 0%, #047857 100%);
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
+        }
+
+        .btn-success:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 16px rgba(16, 185, 129, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+
+    <div class="container d-flex justify-content-center">
+        <div class="main-card">
+            <a href="/" class="back-btn">← Trang chủ</a>
+            <h2>CAESAR CIPHER</h2>
+
+            <!-- Encryption Section -->
+            <div class="form-section">
+                <div class="section-title enc-title">Mã hóa (Encryption)</div>
+                <form method="POST" action="/encrypt">
+                    <div class="form-group mb-3">
+                        <label class="form-label">Bản rõ (Plain text):</label>
+                        <input type="text" class="form-control" name="inputPlainText" placeholder="Nhập bản rõ cần mã hóa" required autofocus/>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label class="form-label">Khóa dịch xoay (Key):</label>
+                        <input type="number" class="form-control" name="inputKeyPlain" placeholder="Nhập khóa dịch xoay (Số nguyên)" required/>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Mã hóa</button>
+                </form>
+            </div>
+
+            <!-- Decryption Section -->
+            <div class="form-section mb-0">
+                <div class="section-title dec-title">Giải mã (Decryption)</div>
+                <form method="POST" action="/decrypt">
+                    <div class="form-group mb-3">
+                        <label class="form-label">Bản mã (Cipher text):</label>
+                        <input type="text" class="form-control" name="inputCipherText" placeholder="Nhập bản mã cần giải mã" required/>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label class="form-label">Khóa dịch xoay (Key):</label>
+                        <input type="number" class="form-control" name="inputKeyCipher" placeholder="Nhập khóa dịch xoay (Số nguyên)" required/>
+                    </div>
+                    <button type="submit" class="btn btn-success">Giải mã</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
